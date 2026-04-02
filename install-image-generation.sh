@@ -22,6 +22,7 @@ echo ""
 echo -e "${YELLOW}Disclaimer:${NC}"
 echo "Use this setup script at your own risk."
 echo "Komputer Mechanic is not liable for mistakes, misconfiguration, downtime, or any errors caused by using this script."
+echo "For help and tutorials, visit: https://komputermechanic.com/"
 echo ""
 read -p "Do you want to proceed? (y/n): " PROCEED_SETUP
 echo ""
