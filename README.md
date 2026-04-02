@@ -1,72 +1,64 @@
-# FAL Image Generation Setup for OpenClaw
+# OpenClaw Image Generation Setup
 
 Created by **Komputer Mechanic**  
 Website: <https://komputermechanic.com/>
 
-This setup uses a simple direct approach.
+This repo is intentionally simple.
 
-## Step 1: add your FAL key
+It uses a single script to set up image generation for OpenClaw with:
+- OpenAI only
+- fal.ai only
+- or both with primary + fallback
 
-Replace `your_actual_fal_key_here` with your real FAL API key, then run:
+## Main script
 
-```bash
-echo "export FAL_KEY=your_actual_fal_key_here" >> ~/.bashrc && source ~/.bashrc
-```
+- `install-image-generation.sh`
 
-## Step 2: set OpenClaw to use FAL for image generation
+## What the script does
 
-Run:
+The script:
+- checks that OpenClaw is installed
+- ensures `~/.openclaw/.env` exists
+- asks which provider(s) you want to set up
+- stores your API key(s) in `~/.openclaw/.env`
+- updates `~/.openclaw/openclaw.json`
+- creates the `flux2pro` skill when fal.ai is selected
+- restarts OpenClaw Gateway
 
-```bash
-node -e "
-const fs = require('fs');
-const cfg = JSON.parse(fs.readFileSync('/root/.openclaw/openclaw.json', 'utf8'));
-cfg.agents.defaults.imageGenerationModel = 'fal/fal-ai/flux/dev';
-fs.writeFileSync('/root/.openclaw/openclaw.json', JSON.stringify(cfg, null, 2));
-console.log('Done');
-"
-```
+## Run it
 
-## Step 3: restart OpenClaw Gateway
-
-Run:
+### Cautious path
 
 ```bash
-openclaw gateway restart
+wget -O install-image-generation.sh https://raw.githubusercontent.com/komputermechanic/falai-openclaw-integration/main/install-image-generation.sh
+bash install-image-generation.sh
 ```
 
-## What this does
+### Fast path
 
-- stores `FAL_KEY` in your shell profile
-- updates OpenClaw config to use `fal/fal-ai/flux/dev`
-- restarts OpenClaw Gateway so the change can take effect
+```bash
+curl -fsSL https://raw.githubusercontent.com/komputermechanic/falai-openclaw-integration/main/install-image-generation.sh | bash
+```
 
-## Prompts users can give their OpenClaw agent
+## What users should expect
 
-### Full guided prompt
+During setup, the script will:
+- ask which provider(s) to configure
+- ask for the relevant API key(s)
+- ask which provider should be primary if both are selected
+- restart OpenClaw Gateway
+
+## OpenClaw agent prompt example
 
 ```text
-Help me set up FAL image generation for OpenClaw on this machine using this GitHub repo:
+Help me set up image generation for OpenClaw using this GitHub repo:
 
 https://github.com/komputermechanic/falai-openclaw-integration
 
-Guide me step by step.
-Do not ask me to paste my FAL API key into chat.
-Instead, tell me exactly which terminal commands I should run locally.
-Make sure OpenClaw is configured to use fal/fal-ai/flux/dev, and remind me to restart OpenClaw Gateway at the end.
-After setup, help me verify that image generation works.
+Guide me step by step. If needed, tell me to run the install script from the repo.
 ```
 
-### Shorter prompt
+## Notes
 
-```text
-Help me set up this FAL image generation repo for OpenClaw:
-
-https://github.com/komputermechanic/falai-openclaw-integration
-
-Do not ask for my API key in chat. Tell me the exact terminal commands to run, then help me verify the setup.
-```
-
-## Test
-
-After setup, ask OpenClaw to generate an image.
+- If you select fal.ai, the script also creates the `flux2pro` skill intentionally.
+- This repo is built around the single setup script as the primary setup method.
