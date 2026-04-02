@@ -1,0 +1,6 @@
+{
+  "author": "Komputer Mechanic",
+  "website": "https://komputermechanic.com/",
+  "title": "FAL Image Generation Setup for OpenClaw",
+  "summary": "An agent-assisted setup package for enabling FAL image generation in OpenClaw without exposing the API key in chat."
+}
