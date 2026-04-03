@@ -342,8 +342,16 @@ if [ "$ACTION_CHOICE" = "2" ]; then
     echo -e "Edit support:     ${YELLOW}❌ No${NC}"
   fi
   echo ""
-  echo "Tell your agent:"
-  echo "  The fal_image skill has been updated to use $FAL_MODEL_NAME"
+  echo "Send this to your agent to introduce the updated skill:"
+  echo ""
+  echo "---"
+  echo "Hey, I have updated your image generation skill fal_image to use $FAL_MODEL_NAME."
+  echo "The skill is located at ~/.openclaw/skills/fal-image/SKILL.md"
+  echo "Please re-read the skill file so you know the updated configuration."
+  echo "Once you have read it, run a smoke test — generate an image of:"
+  echo "A futuristic African city skyline at sunset, cinematic lighting."
+  echo "Return the image URL when done."
+  echo "---"
   echo ""
   exit 0
 fi
@@ -535,6 +543,14 @@ if [ "$SETUP_FAL" = true ]; then
   fi
 fi
 echo ""
-echo "Test it by asking your agent:"
-echo "  Generate an image of a futuristic African city skyline at sunset"
+echo "Send this to your agent to introduce the skill and run a smoke test:"
+echo ""
+echo "---"
+echo "Hey, I have configured a new image generation skill for you called fal_image."
+echo "It is located at ~/.openclaw/skills/fal-image/SKILL.md"
+echo "Please read the skill file so you know how to use it."
+echo "Once you have read it, use it to generate a smoke test image:"
+echo "A futuristic African city skyline at sunset, cinematic lighting."
+echo "Return the image URL when done."
+echo "---"
 echo ""
