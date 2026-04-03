@@ -201,15 +201,16 @@ echo -e "${BOLD}What do you want to do?${NC}"
 echo ""
 echo "  1) Fresh setup    — Configure image generation from scratch"
 echo "  2) Switch model   — Change your current fal.ai model"
-echo "  3) Uninstall      — Remove image generation from OpenClaw"
+echo "  3) Update keys    — Replace your OpenAI or fal.ai API key"
+echo "  4) Uninstall      — Remove image generation from OpenClaw"
 echo ""
-read -p "Enter 1, 2 or 3: " ACTION_CHOICE
+read -p "Enter 1, 2, 3 or 4: " ACTION_CHOICE
 echo ""
 
 # ============================================
 # UNINSTALL FLOW
 # ============================================
-if [ "$ACTION_CHOICE" = "3" ]; then
+if [ "$ACTION_CHOICE" = "4" ]; then
 
   echo -e "${YELLOW}This will:${NC}"
   echo "  - Remove imageGenerationModel from openclaw.json"
@@ -275,6 +276,76 @@ if [ "$ACTION_CHOICE" = "3" ]; then
   echo ""
   echo "Image generation has been removed from your OpenClaw setup."
   echo "Run this script again anytime to set it up again."
+  echo ""
+  exit 0
+fi
+
+# ============================================
+# UPDATE KEYS FLOW
+# ============================================
+if [ "$ACTION_CHOICE" = "3" ]; then
+
+  echo -e "${BOLD}Which API key do you want to update?${NC}"
+  echo ""
+  echo "  1) fal.ai key     (FAL_KEY)          — Used by all fal.ai models"
+  echo "  2) OpenAI key     (OPENAI_API_KEY)   — Used by gpt-image-1 only"
+  echo "  3) Both keys"
+  echo ""
+  echo -e "${YELLOW}Note: fal.ai and OpenAI use separate keys. Make sure you paste the correct key for each provider.${NC}"
+  echo ""
+  read -p "Enter 1, 2 or 3: " KEY_CHOICE
+  echo ""
+
+  if [ "$KEY_CHOICE" != "1" ] && [ "$KEY_CHOICE" != "2" ] && [ "$KEY_CHOICE" != "3" ]; then
+    echo -e "${RED}❌ Invalid choice. Exiting.${NC}"
+    exit 1
+  fi
+
+  if [ "$KEY_CHOICE" = "1" ] || [ "$KEY_CHOICE" = "3" ]; then
+    echo -e "${BOLD}Updating fal.ai key (FAL_KEY)${NC}"
+    echo "This key is used by ALL fal.ai models (FLUX, Nano Banana, etc.)"
+    echo "Get your key at: https://fal.ai/dashboard/keys"
+    echo ""
+    read -r -s -p "Paste your fal.ai API key: " NEW_FAL_KEY; echo
+    echo ""
+    if [ -z "$NEW_FAL_KEY" ]; then
+      echo -e "${RED}❌ No fal.ai key entered. Exiting.${NC}"
+      exit 1
+    fi
+    sed -i '/^FAL_KEY/d' "$HOME/.openclaw/.env"
+    echo "FAL_KEY=$NEW_FAL_KEY" >> "$HOME/.openclaw/.env"
+    echo -e "${GREEN}✅ fal.ai key updated${NC}"
+    echo ""
+  fi
+
+  if [ "$KEY_CHOICE" = "2" ] || [ "$KEY_CHOICE" = "3" ]; then
+    echo -e "${BOLD}Updating OpenAI key (OPENAI_API_KEY)${NC}"
+    echo "This key is used ONLY by the OpenAI provider (gpt-image-1)."
+    echo "Get your key at: https://platform.openai.com/api-keys"
+    echo ""
+    read -r -s -p "Paste your OpenAI API key: " NEW_OPENAI_KEY; echo
+    echo ""
+    if [ -z "$NEW_OPENAI_KEY" ]; then
+      echo -e "${RED}❌ No OpenAI key entered. Exiting.${NC}"
+      exit 1
+    fi
+    sed -i '/^OPENAI_API_KEY/d' "$HOME/.openclaw/.env"
+    echo "OPENAI_API_KEY=$NEW_OPENAI_KEY" >> "$HOME/.openclaw/.env"
+    echo -e "${GREEN}✅ OpenAI key updated${NC}"
+    echo ""
+  fi
+
+  echo -e "${YELLOW}Restarting OpenClaw gateway...${NC}"
+  openclaw gateway restart
+  echo -e "${GREEN}✅ Gateway restarted${NC}"
+
+  echo ""
+  echo -e "${GREEN}============================================${NC}"
+  echo -e "${GREEN}  API key(s) updated successfully!${NC}"
+  echo -e "${GREEN}============================================${NC}"
+  echo ""
+  echo "Your new key(s) are saved and the gateway has been restarted."
+  echo "Run a quick image generation test to confirm everything is working."
   echo ""
   exit 0
 fi
