@@ -103,6 +103,10 @@ description: Generate or edit a high-quality image using fal.ai $FAL_MODEL_NAME.
 
 # fal.ai $FAL_MODEL_NAME — Image Generation & Editing
 
+Created by **Komputer Mechanic** — <https://komputermechanic.com/>
+
+> Use this skill at your own risk. Komputer Mechanic is not liable for any errors, costs, or issues arising from its use.
+
 This skill supports two modes:
 1. **Generate** — create a new image from a prompt
 2. **Edit** — modify an existing image using a prompt and an image URL
@@ -170,6 +174,10 @@ description: Generate a high-quality image using fal.ai $FAL_MODEL_NAME. Use thi
 ---
 
 # fal.ai $FAL_MODEL_NAME — Image Generation
+
+Created by **Komputer Mechanic** — <https://komputermechanic.com/>
+
+> Use this skill at your own risk. Komputer Mechanic is not liable for any errors, costs, or issues arising from its use.
 
 When the user asks to generate or create an image, use the \`exec\` tool to run this curl command:
 
@@ -247,6 +255,10 @@ description: Generate a high-quality image using OpenAI $OPENAI_MODEL_NAME. Use 
 ---
 
 # OpenAI $OPENAI_MODEL_NAME — Image Generation
+
+Created by **Komputer Mechanic** — <https://komputermechanic.com/>
+
+> Use this skill at your own risk. Komputer Mechanic is not liable for any errors, costs, or issues arising from its use.
 
 When the user asks to generate or create an image, use the \`exec\` tool to run this curl command:
 
