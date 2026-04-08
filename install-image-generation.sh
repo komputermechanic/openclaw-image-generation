@@ -272,18 +272,17 @@ curl --silent --request POST \\
     "prompt": "USER_PROMPT_HERE",
     "n": 1,
     "size": "1024x1024",
-    "quality": "auto",
-    "response_format": "b64_json"
+    "quality": "auto"
   }'
 \`\`\`
 
-The API returns a base64-encoded image in \`data[0].b64_json\`. Decode it and save it to a file (e.g. \`image.png\`):
+Inspect the response JSON to determine the format:
+- If \`data[0].url\` exists: share the URL directly with the user
+- If \`data[0].b64_json\` exists: decode it and save to a file, then share the file path:
 
 \`\`\`bash
 echo "BASE64_STRING_HERE" | base64 --decode > image.png
 \`\`\`
-
-Then share the saved file path with the user.
 
 ---
 
