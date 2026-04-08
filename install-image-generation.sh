@@ -313,14 +313,24 @@ curl --silent --request POST \\
 \`\`\`
 
 Inspect the response JSON to determine the format:
-- If \`data[0].url\` exists: send the image URL directly to the user
-- If \`data[0].b64_json\` exists: decode and save to a temp file:
 
+**If \`data[0].url\` exists**, include it in your reply using the \`MEDIA:\` syntax on its own line:
+\`\`\`
+Here's your image!
+MEDIA:https://the-image-url-here
+\`\`\`
+
+**If \`data[0].b64_json\` exists**, decode it to a temp file, then use the \`MEDIA:\` syntax with the file path:
 \`\`\`bash
 echo "BASE64_STRING_HERE" | base64 --decode > /tmp/generated-image.png
 \`\`\`
+Then reply with:
+\`\`\`
+Here's your image!
+MEDIA:/tmp/generated-image.png
+\`\`\`
 
-Then **send the saved image file back to the user as an image attachment** using whatever tool is available to deliver files in the current chat context. Do not just reply with the file path — the user expects to see the actual image.
+The \`MEDIA:\` line must be on its own line with no leading spaces. OpenClaw will deliver it as an image attachment to the user.
 
 ---
 
