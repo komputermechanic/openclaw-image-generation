@@ -299,8 +299,9 @@ Created by **Komputer Mechanic** — <https://komputermechanic.com/>
 
 When the user asks to generate or create an image, use the \`exec\` tool to run these commands:
 
-**Step 1 — Generate and save the response to a file:**
+**Step 1 — Create the output folder and save the API response to a file:**
 \`\`\`bash
+mkdir -p ~/.openclaw/workspace/ai-generated-images
 curl --silent --request POST \\
   --url https://api.openai.com/v1/images/generations \\
   --header "Authorization: Bearer \$OPENAI_API_KEY" \\
@@ -314,9 +315,15 @@ curl --silent --request POST \\
   }' > ~/.openclaw/workspace/ai-generated-images/response.json
 \`\`\`
 
-**Step 2 — Check the response format:**
+**Step 2 — Check for API errors:**
 \`\`\`bash
-jq -r 'if .data[0].url then "url" elif .data[0].b64_json then "b64" else "error" end' ~/.openclaw/workspace/ai-generated-images/response.json
+jq -r '.error.message // empty' ~/.openclaw/workspace/ai-generated-images/response.json
+\`\`\`
+If this outputs an error message, stop and report it to the user.
+
+**Step 3 — Check the response format:**
+\`\`\`bash
+jq -r 'if .data[0].url then "url" elif .data[0].b64_json then "b64" else "unknown" end' ~/.openclaw/workspace/ai-generated-images/response.json
 \`\`\`
 
 **If the format is \`url\`**, share the URL directly with the user — OpenClaw will deliver it as an image attachment:
@@ -326,7 +333,7 @@ jq -r '.data[0].url' ~/.openclaw/workspace/ai-generated-images/response.json
 
 **If the format is \`b64\`**, decode via file (avoids shell truncation):
 \`\`\`bash
-IMG=~/.openclaw/workspace/ai-generated-images/image-$(date +%s).png
+IMG=~/.openclaw/workspace/ai-generated-images/image-\$(date +%s).png
 jq -r '.data[0].b64_json' ~/.openclaw/workspace/ai-generated-images/response.json | base64 --decode > "\$IMG"
 echo "\$IMG"
 \`\`\`
