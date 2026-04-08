@@ -314,23 +314,14 @@ curl --silent --request POST \\
 
 Inspect the response JSON to determine the format:
 
-**If \`data[0].url\` exists**, include it in your reply using the \`MEDIA:\` syntax on its own line:
-\`\`\`
-Here's your image!
-MEDIA:https://the-image-url-here
-\`\`\`
+**If \`data[0].url\` exists**, share the URL directly with the user — OpenClaw will deliver it as an image attachment.
 
-**If \`data[0].b64_json\` exists**, decode it to a temp file, then use the \`MEDIA:\` syntax with the file path:
+**If \`data[0].b64_json\` exists**, decode it to a temp file then send it using the \`exec\` tool:
+
 \`\`\`bash
 echo "BASE64_STRING_HERE" | base64 --decode > /tmp/generated-image.png
+openclaw message send --media /tmp/generated-image.png --message "Here's your image!"
 \`\`\`
-Then reply with:
-\`\`\`
-Here's your image!
-MEDIA:/tmp/generated-image.png
-\`\`\`
-
-The \`MEDIA:\` line must be on its own line with no leading spaces. OpenClaw will deliver it as an image attachment to the user.
 
 ---
 
