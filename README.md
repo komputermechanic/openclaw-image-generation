@@ -9,7 +9,7 @@ A single interactive installer that adds image generation to OpenClaw. Supports 
 ## Installation
 
 ```bash
-wget -O install-image-generation.sh https://raw.githubusercontent.com/komputermechanic/openclaw-image-generation/main/install-image-generation.sh && bash install-image-generation.sh
+bash <(curl -s https://raw.githubusercontent.com/komputermechanic/openclaw-image-generation/main/install-image-generation.sh)
 ```
 
 ---
