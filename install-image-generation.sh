@@ -283,6 +283,7 @@ select_openai_model() {
 create_openai_skill() {
   OPENAI_SKILL_DIR="$HOME/.openclaw/skills/openai-image"
   mkdir -p "$OPENAI_SKILL_DIR"
+  mkdir -p "$HOME/.openclaw/workspace/ai-generated-images"
 
   cat > "$OPENAI_SKILL_DIR/SKILL.md" << SKILLEOF
 ---
