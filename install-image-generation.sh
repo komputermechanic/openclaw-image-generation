@@ -318,16 +318,17 @@ Inspect the response JSON to determine the format:
 
 **If \`data[0].b64_json\` exists**:
 
-1. Decode the image using the \`exec\` tool:
+1. Decode the image using the \`exec\` tool (save to the workspace, not /tmp):
 \`\`\`bash
-echo "BASE64_STRING_HERE" | base64 --decode > /tmp/generated-image.png
+mkdir -p ~/.openclaw/workspace/ai-generated-images
+echo "BASE64_STRING_HERE" | base64 --decode > ~/.openclaw/workspace/ai-generated-images/image-$(date +%s).png
 \`\`\`
 
 2. Use the \`session_status\` tool to get the current session's channel and routing target.
 
 3. Send the image using the \`exec\` tool with the channel and target from step 2:
 \`\`\`bash
-openclaw message send --channel CHANNEL_HERE --target TARGET_HERE --media /tmp/generated-image.png --message "Here's your image!"
+openclaw message send --channel CHANNEL_HERE --target TARGET_HERE --media ~/.openclaw/workspace/ai-generated-images/image-TIMESTAMP.png --message "Here's your image!"
 \`\`\`
 
 ---
