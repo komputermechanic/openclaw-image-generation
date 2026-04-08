@@ -43,6 +43,35 @@ mkdir -p "$HOME/.openclaw"
 touch "$HOME/.openclaw/.env"
 
 # ============================================
+# KEY VALIDATION FUNCTIONS
+# ============================================
+validate_openai_key() {
+  local key="$1"
+  if [[ ! "$key" =~ ^sk- ]]; then
+    echo -e "${RED}❌ Invalid OpenAI key — must start with 'sk-'${NC}"
+    return 1
+  fi
+  if [ "${#key}" -lt 30 ]; then
+    echo -e "${RED}❌ Invalid OpenAI key — too short${NC}"
+    return 1
+  fi
+  return 0
+}
+
+validate_fal_key() {
+  local key="$1"
+  if [[ "$key" == *" "* ]]; then
+    echo -e "${RED}❌ Invalid fal.ai key — must not contain spaces${NC}"
+    return 1
+  fi
+  if [ "${#key}" -lt 20 ]; then
+    echo -e "${RED}❌ Invalid fal.ai key — too short${NC}"
+    return 1
+  fi
+  return 0
+}
+
+# ============================================
 # FAL MODEL SELECTION FUNCTION
 # ============================================
 select_fal_model() {
@@ -433,6 +462,7 @@ if [ "$ACTION_CHOICE" = "3" ]; then
       echo -e "${RED}❌ No fal.ai key entered. Exiting.${NC}"
       exit 1
     fi
+    if ! validate_fal_key "$NEW_FAL_KEY"; then exit 1; fi
     sed -i '/^FAL_KEY/d' "$HOME/.openclaw/.env"
     echo "FAL_KEY=$NEW_FAL_KEY" >> "$HOME/.openclaw/.env"
     echo -e "${GREEN}✅ fal.ai key updated${NC}"
@@ -450,6 +480,7 @@ if [ "$ACTION_CHOICE" = "3" ]; then
       echo -e "${RED}❌ No OpenAI key entered. Exiting.${NC}"
       exit 1
     fi
+    if ! validate_openai_key "$NEW_OPENAI_KEY"; then exit 1; fi
     sed -i '/^OPENAI_API_KEY/d' "$HOME/.openclaw/.env"
     echo "OPENAI_API_KEY=$NEW_OPENAI_KEY" >> "$HOME/.openclaw/.env"
     echo -e "${GREEN}✅ OpenAI key updated${NC}"
@@ -612,6 +643,7 @@ if [ "$SETUP_OPENAI" = true ]; then
         echo -e "${RED}❌ No OpenAI key entered. Exiting.${NC}"
         exit 1
       fi
+      if ! validate_openai_key "$OPENAI_KEY"; then exit 1; fi
       PENDING_OPENAI_KEY="$OPENAI_KEY"
       echo -e "${GREEN}✅ OpenAI key received${NC}"
       echo ""
@@ -626,6 +658,7 @@ if [ "$SETUP_OPENAI" = true ]; then
       echo -e "${RED}❌ No OpenAI key entered. Exiting.${NC}"
       exit 1
     fi
+    if ! validate_openai_key "$OPENAI_KEY"; then exit 1; fi
     PENDING_OPENAI_KEY="$OPENAI_KEY"
     echo -e "${GREEN}✅ OpenAI key received${NC}"
     echo ""
@@ -651,6 +684,7 @@ if [ "$SETUP_FAL" = true ]; then
         echo -e "${RED}❌ No fal.ai key entered. Exiting.${NC}"
         exit 1
       fi
+      if ! validate_fal_key "$FAL_KEY"; then exit 1; fi
       PENDING_FAL_KEY="$FAL_KEY"
       echo -e "${GREEN}✅ fal.ai key received${NC}"
       echo ""
@@ -662,6 +696,7 @@ if [ "$SETUP_FAL" = true ]; then
       echo -e "${RED}❌ No fal.ai key entered. Exiting.${NC}"
       exit 1
     fi
+    if ! validate_fal_key "$FAL_KEY"; then exit 1; fi
     PENDING_FAL_KEY="$FAL_KEY"
     echo -e "${GREEN}✅ fal.ai key received${NC}"
     echo ""
